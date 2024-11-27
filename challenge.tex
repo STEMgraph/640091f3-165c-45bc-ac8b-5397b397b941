@@ -13,6 +13,90 @@
         There are definitly reasons why one would do that, sometimes even to overwrite some already defined identifiers purposefully.
         But in general, we would much rather like to run functions in their own environment.
     \end{chadescription}
+    \begin{task}
+        Open a new terminal-emulator.
+        Within this terminal, set a new identifier and assign a value to it:
+        \begin{lstlisting}
+            my_var=42
+        \end{lstlisting}
+        Now run \texttt{echo \$my_var} to inspect the value of \texttt{my_var}.
+        This identifier and its variable value is local to your current terminal session.
+        Type exit and open a new terminal.
+        Run \texttt{echo \$my_var} again to inspect the value of \texttt{my_var}.
+        You should see, that the value is empty. 
+        This is not surprising, since \texttt{my_var} is only defined in the current terminal session.\\
+        Type \texttt{bash} into your terminal and press \texttt{Enter}.
+        It may look like nothing has happend, but you couldn't be further from the truth!
+        Actually, you just started a new terminal-session, within your current session. 
+        \\
+        \textbf{Note: }\texttt{bash} is shorthand for \textit{Bourne Again Shell}.
+        This is a shell-program that is based on the original \textit{Bourne Shell} and more or less the standard command-line interpreter.
+        Most modern systems come with \texttt{bash} preinstalled, whether it is \textit{Mac OS}, \textit{Windows 11} or \textit{Linux}.
+        Even though, different operating-systems have different versions of \texttt{bash}, the basic functionality is the same.
+        There are also rivaling command-line interpreters, that are not based on \texttt{bash}. 
+        Such as \textit{Zsh} which is the default shell on \textit{Mac OS}, \textit{CMD} which is the default shell on \textit{Windows}, or other shells like \textit{Fish} or \textit{PowerShell}.
+        All of these shell-interpreters use a slightly different syntax, but the basic ideas are always the same.
+        \texttt{bash} is a good choice for most users, since it is a standard shell and has a large user-base.
+        The \textit{bash}-syntax thus has become the de-facto lingua-franca for shell-scripting.
+        \\
+        To get out of this session type \texttt{exit} and press \texttt{Enter}.
+        You see, that your terminal emulator is still open.
+        It didn't close, because the original session wasn't terminated yet. 
+        Run \texttt{bash} again, press \texttt{Enter} and run \texttt{bash} again. 
+        Do this a couple of times. 
+        After you have done this, type \texttt{exit} and press \texttt{Enter}.
+        Type \texttt{exit} again and again, until the terminal emulator closes.
+        Since you are running one session within another, this is called \textit{nested terminal sessions}.
+        You may also refer to this as a stack of terminal sessions, because they are stacked on top of each other.
+        The commands you are running are always executed in the innermost terminal session.
+        When you call \texttt{exit}, the innermost or top most terminal session is terminated.
+        The last one that was opened is the first one that get's terminated.
+        This is called \textit{last-in-first-out} or \textit{LIFO} and we will see this principle being reused over and over again in upcoming challenges.
+        Repeat the opening of a couple of nested terminal sessions without closing them. 
+        In every new instance, run \texttt{echo \$SHLVL}.
+        This identifier is a special variable that holds the number of nested terminal sessions.
+        You can use it to keep track of the number of nested sessions.
+        \begin{questions}
+            \item Before you continue with the next task, write down why you think, that nested terminal sessions are useful.
+        \end{questions}
+    \end{task}
+
+    \begin{task}
+        Open a new terminal-emulator and define an identifier \texttt{my_var} with a value of 42.
+        Run \texttt{echo \$my_var} to inspect the value of \texttt{my_var}.
+        Start a new terminal-session within the current one and run \texttt{echo \$my_var} again.
+        Exit the terminal session and get back to the original one.
+        Run \texttt{echo \$my_var} again to inspect the value of \texttt{my_var}.
+        \begin{questions}
+            \item Describe what happend to the identifier \texttt{my_var}.
+            \item Try to explain why this happend and try to use the word \textit{local identifier}.
+        \end{questions}
+    \end{task}
+        
+    \begin{task}
+        Close all terminal sessions and start with a fresh one.
+        Define an identifier \texttt{my_var} with a value of 42.
+        Now run the command \texttt{export my_var}.
+        Start a new terminal-session within the current one and run \texttt{echo \$my_var} again.
+        Exit the terminal session and get back to the original one.
+        Run \texttt{echo \$my_var} again to inspect the value of \texttt{my_var}.
+        \begin{questions}
+            \item Describe what happend to the identifier \texttt{my_var}.
+            \item Try to explain why this happend and try to use the word \textit{global identifier}.
+        \end{questions}
+        By the way, you may also define and export an identifier in one line by typing \texttt{export my_var=42}.
+    \end{task}
+    
+    \begin{task}
+        Exported identifiers are visible in all nested subshells and other subprocesses.
+        Therefor they are called \textit{global identifiers}.
+        The memory-region that holds all exported identifiers, whether it's values or functions is called the \textit{environment}.
+        We can also say, that all subprocesses share the same environment.
+        You can inspect the environment of a subprocess by running \texttt{env}.\\
+        It is not always useful, to export identifiers if we want to use them in a subprocess.
+        Sometimes, it is less error-prone to define the identifier in the subprocess itself.
+        You can do that by opening a new terminal session and defining the identifier there, or by prepending a list of identifiers to the call of your process as such: \texttt{my_var=42 my_process}.
+
 
     \begin{task}
         We start by writing a function and storing it in a file.
@@ -21,48 +105,19 @@
             echo $(( $1 * $2 ))
             }' > multiply.sh
         \end{lstlisting}
-        
-        \begin{enumerate}
-            \item Write down a skill, on a piece of paper that you really like.
-            \item Come up with a good explaination, why this skill is useful in STEM. 
-            \item Explain, why this is a basic task to perform.
-            \item Think of 3 to 4 applications of this skill.
-            \item Answer the questions below.
-            \item Write a request to ChatGPT using the following prompt:
-            \begin{lstlisting}
-                I am working on github.com/STEMgraph challenges.
-                Today I worked on the following:
-                ```
-                <insert raw text of this challenge here>
-                ```
-                Please give me detailed feedback to my answers to the provided questions.
-                Here are my answers in the correct order:
-                ```
-                <insert your answers to the tasks questions here>
-                ```
-            \end{lstlisting}
-        \end{enumerate}
+        Run \texttt{ls} to ensure, that the file has been created and use \texttt{cat multiply.sh} to inspect its content.
+        Check whether the function \texttt{multiply} has been defined in the current terminal session by running \texttt{declare -f multiply}.
+        If it already exists, remove it with \texttt{unset -f multiply}.
+        We now want to use the source method, to call the function: \texttt{source multiply.sh} and then call it: \texttt{multiply 2 3}.
+        Everything should work as expected.
+        If there is an error now, go back to your function definition and fix it.
+        Run \texttt{unset -f multiply} to remove the function again.
+        No let's call the \textit{Shell-Program} itself and pass it the path to the stored function as an argument: \texttt{bash multiply.sh}.
+        Check whether the function \texttt{multiply} has been defined in the current terminal session by running \texttt{declare -f multiply} again.
+        Due to the starting of the new terminal session, the function was only defined in the new terminal session.
+        Since the file that we handed to the new terminal session 
 
-%% The questions should be structured carefully and don't ask to much information at once. 
-%% Especially when a Chatbot should be able to correct the scholars answers, the questions should be precise and concise.
-%% Have at least three questions to every task.
-        \begin{questions}
-            \item What is the skill you want to teach your scholars?
-            \item Why do you think its a foundationary skill?
-            \item What are the applications of this skill?
-            \item What prerequisites do you need to perform this skill?
-            \item What is the first step to perform this skill?
-            \item What advice do you have for the scholar at the end of this challenge?
-        \end{questions}
-    \end{task}
-
-%% If you want the scholar to take some further learning from the tasks that they just performed, use the advice tag.
-%% The advise should not be longer than maybe 80 words.
     \begin{advice}
-        Let someone from your peer-group try out your challenges!
-        Have them generate issues in the github repository and let them write down how long it took them to complete the challenge.
-        A good challenge is one, that takes less than 30 minutes to complete.
-        This way, scholars can plan their day.
-        Happy generating!
+      
     \end{advice}
 \end{challenge}
